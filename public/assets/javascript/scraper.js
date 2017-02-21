@@ -30,11 +30,13 @@ request("https://techcrunch.com/", function(error, response, html) {
         var title = $(element).children("h2.post-title").text();
         var excerpt = $(element).children("p.excerpt").text();
         var link = $(element).children("h2.post-title").children().attr("href");
+        var photoLink = $(element).children().children().children().attr("src");
 
         result.push({
             title: title,
             excerpt: excerpt,
-            link: link
+            link: link,
+            photoLink: photoLink
         });
 
     });
