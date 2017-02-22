@@ -28,6 +28,7 @@ app.use(bodyParser.text());
 app.use(bodyParser.json({
     type: "application/vnd.api+json"
 }));
+app.use(express.static(__dirname + '/public/assets'));
 
 // Requires the routes from the controller.js file and sets the middleware
 // to use these routes.
