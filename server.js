@@ -5,7 +5,7 @@ var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
 var PORT = process.env.PORT || 8000;
 
-mongoose.connect('mongodb://localhost/test');
+mongoose.connect('mongodb://localhost/TC_scraperDB');
 
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
@@ -29,6 +29,12 @@ app.use(bodyParser.json({
     type: "application/vnd.api+json"
 }));
 app.use(express.static(__dirname + '/public/assets'));
+
+
+// create collection in here so its only created once
+
+
+
 
 // Requires the routes from the controller.js file and sets the middleware
 // to use these routes.
