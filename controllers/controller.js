@@ -9,6 +9,7 @@ router.get('/', function(req, res) {
         if (err) {
             console.log(err);
         } else {
+            articles = articles.reverse();
             res.render('scrape.handlebars', { articles: articles });
         }
     });
@@ -29,9 +30,6 @@ router.get('/scrape', function(req, res) {
         // (i: iterator. element: the current element)
         $("div.block-content").each(function(i, element) {
 
-            // Save the text of the element (this) in a "title" variable
-            // var title = $(this).text();
-
             // In the currently selected element, look at its child elements (i.e., its a-tags),
             // then save the values for any "href" attributes that the child elements may have
             var title = $(element).children("h2.post-title").text();
@@ -45,35 +43,42 @@ router.get('/scrape', function(req, res) {
             //     link: link,
             //     photoLink: photoLink
             // });
+            if (title !== "") {
+                var newArticle = new scrapedArticles({
+                    title: title,
+                    excerpt: excerpt,
+                    link: link,
+                    photoLink: photoLink,
+                    comments: [],
+                    saved: false
+                });
 
-            var newArticle = new scrapedArticles({
-                title: title,
-                excerpt: excerpt,
-                link: link,
-                photoLink: photoLink,
-                comments: [],
-                saved: false
-            });
-
-            newArticle.save(function(err, article) {
-                    if (err) {
-                        console.log(err);
-                    } else {
-                        console.log(article);
+                scrapedArticles.find({ title: newArticle.title }, function(err, article) {
+                    if (article.length != 1) {
+                        newArticle.save(function(err, article) {
+                            if (err) {
+                                // console.log(err);
+                            } else {
+                                // console.log(article);
+                            }
+                        })
                     }
-                })
-                // scrapedArticles.find({ title: result[i].title }, function(err, article) {
-                //     if (!article.length) {
-                //         scrapedArticles.save
-                //     }
-                // });
-
-
+                });
+            }
         });
-
-        console.log(result);
     });
 });
+
+router.put('/save', function(req, res) {
+    scrapedArticles.update({ _id: req.body.id }, { $set: { saved: true } }, function(err, status) {
+        if (err) {
+            res.send('fail');
+        } else {
+            res.send('pass');
+        }
+    });
+});
+
 
 // Export routes for server.js to use.
 module.exports = router;

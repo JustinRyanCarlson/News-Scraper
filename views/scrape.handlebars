@@ -1,3 +1,19 @@
+<div class="container spacer">
 {{#each articles}}
-    <li>{{this}}</li>
+    <div class="row">
+        <div class="col-sm-3">
+            <img src="{{this.photoLink}}" alt="Post IMG">
+        </div>
+        <div class="col-sm-7">
+            <h4>{{this.title}}</h4>
+            <br>
+            <p>{{this.excerpt}}</p>
+            <a href="{{this.link}}">View this article on TechCrunch</a>
+        </div>
+        <div class="col-sm-2">
+            <a id="{{this._id}}" class="btn btn-primary save">Save Article</a>
+        </div>
+    </div>
+    <hr>
  {{/each}}
+ </div>
