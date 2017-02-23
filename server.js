@@ -31,11 +31,6 @@ app.use(bodyParser.json({
 app.use(express.static(__dirname + '/public/assets'));
 
 
-// create collection in here so its only created once
-
-
-
-
 // Requires the routes from the controller.js file and sets the middleware
 // to use these routes.
 var routes = require("./controllers/controller.js");

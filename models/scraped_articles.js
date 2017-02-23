@@ -5,7 +5,9 @@ var scrapedArticlesSchema = new Schema({
     title: String,
     excerpt: String,
     link: String,
-    photoLink: String
+    photoLink: String,
+    comments: [],
+    saved: Boolean
 });
 
 var scrapedArticles = mongoose.model('scrapedArticles', scrapedArticlesSchema);
