@@ -28,3 +28,24 @@ footer {
 .icons {
     max-width: 25px;
 }
+
+body {
+    padding-bottom: 20px;
+}
+
+.delete {
+    margin-top: 65px;
+}
+
+.comments {
+    margin-top: 65px;
+}
+
+.comment-header {
+    margin-top: 0px;
+    margin-bottom: 40px;
+}
+
+.post-comment {
+    margin-bottom: 40px;
+}

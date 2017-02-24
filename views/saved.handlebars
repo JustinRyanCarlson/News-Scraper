@@ -11,7 +11,16 @@
             <a href="{{this.link}}" target="_BLANK">View this article on TechCrunch</a>
         </div>
         <div class="col-sm-2">
-            <a id="{{this._id}}" class="btn btn-primary save">View Comments</a>
+            <div class="row">
+                <div class="col-sm-12 text-center">
+                    <a href="/saved/comments/{{this._id}}" class="btn btn-primary comments">View Comments</a>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12 text-center">
+                    <a id="{{this._id}}" class="btn btn-default delete">Delete Article</a>
+                </div>
+            </div>
         </div>
     </div>
     <hr>

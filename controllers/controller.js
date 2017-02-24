@@ -24,6 +24,16 @@ router.get('/saved', function(req, res) {
     });
 });
 
+router.get('/saved/comments/:id', function(req, res) {
+    scrapedArticles.find({ "_id": req.params.id }, function(err, articles) {
+        if (err) {
+            console.log(err);
+        } else {
+            res.render('comments.handlebars', { articles: articles });
+        }
+    });
+});
+
 router.get('/scrape', function(req, res) {
     // Making a request call for reddit's "webdev" board. The page's HTML is saved as the callback's third argument
     request("https://techcrunch.com/", function(error, response, html) {
@@ -72,7 +82,7 @@ router.get('/scrape', function(req, res) {
     });
 });
 
-router.put('/save', function(req, res) {
+router.put('/add/article', function(req, res) {
     scrapedArticles.update({ _id: req.body.id }, { $set: { saved: true } }, function(err, status) {
         if (err) {
             res.send('fail');
@@ -81,6 +91,17 @@ router.put('/save', function(req, res) {
         }
     });
 });
+
+router.put('saved/remove_article', function(req, res) {
+    scrapedArticles.update({ _id: req.body.id }, { $set: { saved: false } }, function(err, status) {
+        if (err) {
+            res.send('fail');
+        } else {
+            res.send('pass');
+        }
+    });
+});
+
 
 
 // Export routes for server.js to use.
