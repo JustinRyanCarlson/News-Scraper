@@ -3,7 +3,8 @@ var app = express();
 var exphbs = require("express-handlebars");
 var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
-var PORT = process.env.PORT || 8000;
+var favicon = require('serve-favicon');
+var PORT = process.env.PORT || 8080;
 
 mongoose.connect('mongodb://localhost/TC_scraperDB');
 
@@ -29,6 +30,7 @@ app.use(bodyParser.json({
     type: "application/vnd.api+json"
 }));
 app.use(express.static(__dirname + '/public/assets'));
+app.use(favicon(__dirname + '/public/assets/img/favicon.ico'));
 
 
 // Requires the routes from the controller.js file and sets the middleware
