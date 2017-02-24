@@ -17,6 +17,22 @@
         <div class="col-sm-1"></div>
     </div>
     <hr> {{/each}}
+
+    {{#each comments}}
+    <div class="row">
+        <div class="col-sm-1"></div>
+        <div class="col-sm-10">
+            <p>{{this.comment}}<i class="grey-txt"> - {{this.author}}</i></p>
+        </div>
+        <div class="col-sm-1">
+            <a href="#">
+                <span id={{this.commentId}} data-articleId="{{this.articleId}}" class="glyphicon glyphicon-remove"></span>
+            </a>
+        </div>
+    </div>
+    <hr>
+    {{/each}}
+
     <div class="row">
         <div class="col-sm-2"></div>
         <div class="col-sm-8">
@@ -29,7 +45,9 @@
                     <label for="comment">Comment</label>
                     <textarea class="form-control" id="comment" rows="8"></textarea>
                 </div>
-                <button type="submit" class="btn btn-primary btn-block post-comment">Submit</button>
+                {{#each articles}}
+                <button type="submit" id={{this.id}} class="btn btn-primary btn-block post-comment">Submit</button>
+                {{/each}}
             </form>
         </div>
         <div class="col-sm-2"></div>

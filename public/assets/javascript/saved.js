@@ -16,20 +16,3 @@ $(document.body).on('click', '.delete', function() {
         }
     });
 });
-
-// $(document.body).on('click', '.comments', function() {
-//     $(this).addClass('disabled');
-
-//     $.ajax({
-//         url: '/saved/comments',
-//         type: 'POST',
-//         data: {
-//             id: this.id
-//         },
-//         success: function(response) {
-//             if (response === "fail") {
-//                 console.log("Save FAILED");
-//             }
-//         }
-//     });
-// });

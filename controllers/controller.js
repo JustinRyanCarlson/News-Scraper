@@ -2,6 +2,7 @@ var express = require("express");
 var router = express.Router();
 var request = require("request");
 var cheerio = require("cheerio");
+var randomstring = require("randomstring");
 var scrapedArticles = require('./../models/scraped_articles.js');
 
 router.get('/', function(req, res) {
@@ -29,7 +30,7 @@ router.get('/saved/comments/:id', function(req, res) {
         if (err) {
             console.log(err);
         } else {
-            res.render('comments.handlebars', { articles: articles });
+            res.render('comments.handlebars', { articles: articles, comments: articles[0].comments });
         }
     });
 });
@@ -102,7 +103,39 @@ router.put('/saved/remove_article', function(req, res) {
     });
 });
 
+router.put('/saved/post_comment', function(req, res) {
+    var comment = {
+        "articleId": req.body.id,
+        "commentId": randomstring.generate(),
+        "author": req.body.author,
+        "comment": req.body.comment
+    };
+    scrapedArticles.update({ _id: req.body.id }, { $push: { comments: comment } }, function(err, status) {
+        if (err) {
+            res.send('fail');
+        } else {
+            res.send('pass');
+        }
+    });
+});
 
+
+
+
+
+
+
+
+router.put('/saved/delete_comment', function(req, res) {
+    console.log(req.body);
+    scrapedArticles.update({ _id: req.body.articleId }, { $pull: { "comments": { commentId: req.body.commentId } } }, function(err, status) {
+        if (err) {
+            res.send('fail');
+        } else {
+            res.send('pass');
+        }
+    });
+});
 
 // Export routes for server.js to use.
 module.exports = router;
