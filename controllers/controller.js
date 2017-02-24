@@ -65,6 +65,7 @@ router.get('/scrape', function(req, res) {
                             }
                         });
                     }
+
                 });
             }
         });

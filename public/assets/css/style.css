@@ -3,8 +3,14 @@
 }
 
 footer {
-    background-color: #30659B !important;
-    color: white;
+    /*background-color: #30659B !important;*/
+    background-color: whitesmoke !important;
+    color: black;
+    border-top: solid lightgrey 1px;
+}
+
+.navbar {
+    background-color: whitesmoke !important;
 }
 
 .spacer {
@@ -13,4 +19,12 @@ footer {
 
 .save {
     margin-top: 85px;
+}
+
+.footer-margin {
+    margin: 10px 0px;
+}
+
+.icons {
+    max-width: 25px;
 }
