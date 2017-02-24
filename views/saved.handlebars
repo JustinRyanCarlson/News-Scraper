@@ -10,15 +10,9 @@
             <p>{{this.excerpt}}</p>
             <a href="{{this.link}}" target="_BLANK">View this article on TechCrunch</a>
         </div>
-        {{#if this.saved}}
-        <div class="col-sm-2 text-center">
-            <a id="{{this._id}}" class="btn btn-primary disabled save">Saved</a>
+        <div class="col-sm-2">
+            <a id="{{this._id}}" class="btn btn-primary save">View Comments</a>
         </div>
-        {{else}}
-        <div class="col-sm-2 text-center">
-            <a id="{{this._id}}" class="btn btn-primary save">Save Article</a>
-        </div>
-        {{/if}}
     </div>
     <hr>
  {{/each}}
