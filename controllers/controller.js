@@ -92,7 +92,7 @@ router.put('/add/article', function(req, res) {
     });
 });
 
-router.put('saved/remove_article', function(req, res) {
+router.put('/saved/remove_article', function(req, res) {
     scrapedArticles.update({ _id: req.body.id }, { $set: { saved: false } }, function(err, status) {
         if (err) {
             res.send('fail');
