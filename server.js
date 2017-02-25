@@ -6,7 +6,7 @@ var mongoose = require('mongoose');
 var favicon = require('serve-favicon');
 var PORT = process.env.PORT || 8080;
 
-mongoose.connect('mongodb://localhost/TC_scraperDB');
+mongoose.connect('mongodb://heroku_fkz4z2tc:a20enjmk8hubbkeahf29cb6v01@ds157349.mlab.com:57349/heroku_fkz4z2tc');
 
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
