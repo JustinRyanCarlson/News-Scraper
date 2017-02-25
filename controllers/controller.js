@@ -5,6 +5,49 @@ var cheerio = require("cheerio");
 var randomstring = require("randomstring");
 var scrapedArticles = require('./../models/scraped_articles.js');
 
+
+
+function dbFun(article) {
+    return new Promise(function(resolve, reject) {
+        console.log('main');
+        if (article.title !== "") {
+            var newArticle = new scrapedArticles({
+                title: article.title,
+                excerpt: article.excerpt[0],
+                link: article.link,
+                photoLink: article.photoLink,
+                comments: [],
+                saved: false
+            });
+
+            scrapedArticles.find({ title: newArticle.title }, function(err, article) {
+                console.log('find');
+                if (article.length != 1) {
+                    newArticle.save(function(err, article) {
+                        if (err) {
+                            console.log(err);
+                        } else {
+                            console.log('save');
+                            resolve();
+                        }
+                    });
+                } else {
+                    console.log('exists');
+                    resolve();
+                }
+
+            });
+        } else {
+            resolve();
+        }
+
+    });
+
+}
+
+
+
+
 router.get('/', function(req, res) {
     scrapedArticles.find().sort('-time').exec(function(err, articles) {
         if (err) {
@@ -49,7 +92,7 @@ router.get('/scrape', function(req, res) {
             var $ = cheerio.load(html);
 
             // An empty array to save the data that we'll scrape
-            // var result = [];
+            var result = [];
 
             // With cheerio, find each p-tag with the "title" class
             // (i: iterator. element: the current element)
@@ -62,45 +105,26 @@ router.get('/scrape', function(req, res) {
                 var link = $(element).children("h2.post-title").children().attr("href");
                 var photoLink = $(element).children("span").children("a").children("img").attr("src");
 
-                for (var j = 0; j < i; j++) {
-                    promises.push(dbFun());
-                }
+                var article = {
+                    "title": title,
+                    "excerpt": excerpt,
+                    "link": link,
+                    "photoLink": photoLink
 
-                function dbFun() {
-                    return new Promise(function(resolve, reject) {
-                        var randomTimeout = Math.floor(Math.random() * 5000) + 1;
-
-                        // Using setTimeout to "simulate" an async process such as a db query
-                        setTimeout(function() {
-
-                            if (title !== "") {
-                                var newArticle = new scrapedArticles({
-                                    title: title,
-                                    excerpt: excerpt[0],
-                                    link: link,
-                                    photoLink: photoLink,
-                                    comments: [],
-                                    saved: false
-                                });
-
-                                scrapedArticles.find({ title: newArticle.title }, function(err, article) {
-                                    if (article.length != 1) {
-                                        newArticle.save(function(err, article) {
-                                            if (err) {
-                                                console.log(err);
-                                            } else {
-                                                resolve(value);
-                                            }
-                                        });
-                                    }
-
-                                });
-                            }
-                        }, randomTimeout);
-                    });
-
-                }
+                };
+                result.push(article);
             });
+
+            for (var i = 0; i < result.length; i++) {
+                promises.push(dbFun(result[i]));
+            }
+
+            Promise.all(promises).then(function() {
+                console.log('prom done');
+                res.json('send');
+            });
+
+
         });
     }
 });

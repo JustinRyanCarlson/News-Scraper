@@ -1,7 +1,11 @@
 $(document.body).on('click', '.scrape-btn', function() {
     $('.scrape-btn').addClass('disabled');
 
-    $.get('/scrape');
+    $.get('/scrape', function(status) {
+        if (status === 'send') {
+            window.location.href = '/';
+        }
+    });
 });
 
 
