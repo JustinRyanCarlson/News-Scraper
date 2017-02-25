@@ -9,7 +9,6 @@ var scrapedArticles = require('./../models/scraped_articles.js');
 
 function dbFun(article) {
     return new Promise(function(resolve, reject) {
-        console.log('main');
         if (article.title !== "") {
             var newArticle = new scrapedArticles({
                 title: article.title,
@@ -21,18 +20,15 @@ function dbFun(article) {
             });
 
             scrapedArticles.find({ title: newArticle.title }, function(err, article) {
-                console.log('find');
                 if (article.length != 1) {
                     newArticle.save(function(err, article) {
                         if (err) {
                             console.log(err);
                         } else {
-                            console.log('save');
                             resolve();
                         }
                     });
                 } else {
-                    console.log('exists');
                     resolve();
                 }
 
@@ -98,7 +94,7 @@ router.get('/scrape', function(req, res) {
             // (i: iterator. element: the current element)
             $("div.block-content").each(function(i, element) {
 
-                // In the currently selected element, look at its child elements (i.e., its a-tags),
+                // In the currently selected element, look at its child elements (i.e., its a-tags)
                 // then save the values for any "href" attributes that the child elements may have
                 var title = $(element).children("h2.post-title").text();
                 var excerpt = $(element).children("p.excerpt").text().split(" Read");
@@ -120,11 +116,8 @@ router.get('/scrape', function(req, res) {
             }
 
             Promise.all(promises).then(function() {
-                console.log('prom done');
                 res.json('send');
             });
-
-
         });
     }
 });
