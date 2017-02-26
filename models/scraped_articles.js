@@ -1,6 +1,7 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
+// Schema for a scraped article.
 var scrapedArticlesSchema = new Schema({
     title: String,
     excerpt: String,

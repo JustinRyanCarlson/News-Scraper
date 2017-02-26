@@ -5,45 +5,8 @@ var cheerio = require("cheerio");
 var randomstring = require("randomstring");
 var scrapedArticles = require('./../models/scraped_articles.js');
 
-
-
-function dbFun(article) {
-    return new Promise(function(resolve, reject) {
-        if (article.title !== "") {
-            var newArticle = new scrapedArticles({
-                title: article.title,
-                excerpt: article.excerpt[0],
-                link: article.link,
-                photoLink: article.photoLink,
-                comments: [],
-                saved: false
-            });
-
-            scrapedArticles.find({ title: newArticle.title }, function(err, article) {
-                if (article.length != 1) {
-                    newArticle.save(function(err, article) {
-                        if (err) {
-                            console.log(err);
-                        } else {
-                            resolve();
-                        }
-                    });
-                } else {
-                    resolve();
-                }
-
-            });
-        } else {
-            resolve();
-        }
-
-    });
-
-}
-
-
-
-
+// GET route for the main page, gets articles from the database and sorts them in ascending age then
+// renders scrape.handlebars with them.
 router.get('/', function(req, res) {
     scrapedArticles.find().sort('-time').exec(function(err, articles) {
         if (err) {
@@ -54,6 +17,8 @@ router.get('/', function(req, res) {
     });
 });
 
+// GET route that queries the database for all the documents that have a saved value of true, sorts them
+// in ascending age then renders saved.handlebars with them.
 router.get('/saved', function(req, res) {
     scrapedArticles.find({ "saved": true }).sort('-time').exec(function(err, articles) {
         if (err) {
@@ -64,6 +29,8 @@ router.get('/saved', function(req, res) {
     });
 });
 
+// GET route that queries the database for a specific document then renders the page using this document
+// and its comments.
 router.get('/saved/comments/:id', function(req, res) {
     scrapedArticles.find({ "_id": req.params.id }, function(err, articles) {
         if (err) {
@@ -74,6 +41,10 @@ router.get('/saved/comments/:id', function(req, res) {
     });
 });
 
+// GET route that scrapes techcrunch.com and adds documents that dont already exist to the database then
+// reroutes to "/". I had to use promises in this route since the database queries are asynchronous and would,
+// not be finished when the page redirected resulting in not all the articles being rendered when the GET 
+// request to "/" was made.
 router.get('/scrape', function(req, res) {
     main();
 
@@ -122,6 +93,7 @@ router.get('/scrape', function(req, res) {
     }
 });
 
+// PUT route that takes in a document ID then updates its saved property to TRUE.
 router.put('/add/article', function(req, res) {
     scrapedArticles.update({ _id: req.body.id }, { $set: { saved: true } }, function(err, status) {
         if (err) {
@@ -132,6 +104,7 @@ router.put('/add/article', function(req, res) {
     });
 });
 
+// PUT route that akes in a document ID then updates its saved property to FALSE.
 router.put('/saved/remove_article', function(req, res) {
     scrapedArticles.update({ _id: req.body.id }, { $set: { saved: false } }, function(err, status) {
         if (err) {
@@ -142,6 +115,7 @@ router.put('/saved/remove_article', function(req, res) {
     });
 });
 
+// PUT route that takes in data for a comment and push that data to a specific documents comments array.
 router.put('/saved/post_comment', function(req, res) {
     var comment = {
         "articleId": req.body.id,
@@ -158,15 +132,8 @@ router.put('/saved/post_comment', function(req, res) {
     });
 });
 
-
-
-
-
-
-
-
+// PUT route that takes in the ID of a document and the ID of a comment object within that document and deletes that comment object.
 router.put('/saved/delete_comment', function(req, res) {
-    console.log(req.body);
     scrapedArticles.update({ _id: req.body.articleId }, { $pull: { "comments": { commentId: req.body.commentId } } }, function(err, status) {
         if (err) {
             res.send('fail');
@@ -175,6 +142,42 @@ router.put('/saved/delete_comment', function(req, res) {
         }
     });
 });
+
+// Function used in the GET /scrape route that makes a new document in the database if the title of the article is not an empty string and
+// if the article doesnt already exist. Resolves the promise no matter what.
+function dbFun(article) {
+    return new Promise(function(resolve, reject) {
+        if (article.title !== "") {
+            var newArticle = new scrapedArticles({
+                title: article.title,
+                excerpt: article.excerpt[0],
+                link: article.link,
+                photoLink: article.photoLink,
+                comments: [],
+                saved: false
+            });
+
+            scrapedArticles.find({ title: newArticle.title }, function(err, article) {
+                if (article.length != 1) {
+                    newArticle.save(function(err, article) {
+                        if (err) {
+                            console.log(err);
+                        } else {
+                            resolve();
+                        }
+                    });
+                } else {
+                    resolve();
+                }
+
+            });
+        } else {
+            resolve();
+        }
+
+    });
+
+}
 
 // Export routes for server.js to use.
 module.exports = router;

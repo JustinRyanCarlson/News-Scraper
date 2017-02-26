@@ -1,8 +1,9 @@
+// OnClick event that when a element that has the class post-comment is clicked,
+// a PUT request is made with the author, ID, and comment data.
 $(document.body).on('click', '.post-comment', function() {
     $(this).addClass('disabled');
     var author = $('#author').val().trim();
     var comment = $('#comment').val();
-    console.log(comment);
 
     $.ajax({
         url: '/saved/post_comment',
@@ -22,6 +23,8 @@ $(document.body).on('click', '.post-comment', function() {
     });
 });
 
+// OnClick event that when a element that has the class glyphicon-remove is clicked,
+// a PUT request is made with the comment ID, and article ID.
 $(document.body).on('click', '.glyphicon-remove', function() {
     $(this).addClass('disabled');
     var articleId = $(this).attr("data-articleId");

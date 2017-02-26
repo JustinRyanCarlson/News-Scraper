@@ -1,3 +1,5 @@
+// OnClick event that when a element that has the class delete is clicked,
+// a PUT request is made with the ID, then on success the page is redirected to '/saved'.
 $(document.body).on('click', '.delete', function() {
     $(this).addClass('disabled');
 

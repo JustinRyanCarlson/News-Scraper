@@ -1,3 +1,4 @@
+// Requires various packages, makes express app.
 var express = require('express');
 var app = express();
 var exphbs = require("express-handlebars");
@@ -6,8 +7,10 @@ var mongoose = require('mongoose');
 var favicon = require('serve-favicon');
 var PORT = process.env.PORT || 8080;
 
+// Connects to the MongoDB.
 mongoose.connect('mongodb://heroku_fkz4z2tc:a20enjmk8hubbkeahf29cb6v01@ds157349.mlab.com:57349/heroku_fkz4z2tc');
 
+// Prints to the console when the connection is complete.
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function() {
@@ -38,6 +41,7 @@ app.use(favicon(__dirname + '/public/assets/img/favicon.ico'));
 var routes = require("./controllers/controller.js");
 app.use("/", routes);
 
+// Starts listening to an enviromental port or local port 8080.
 app.listen(PORT, function() {
     console.log('Listening on port: ' + PORT);
 });
